@@ -18,11 +18,11 @@ import cpw.mods.fml.relauncher.IClassTransformer;
 
 public class SimpleCoreTransformer  implements IClassTransformer
 {
-	public static HashMap<String, ClassOverride> override = new HashMap<String, ClassOverride>();
+	public static HashMap<String, String> override = new HashMap<String, String>();
 	
 	public static void addClassOverride(String name, String discription)
 	{
-		override.put(name , new ClassOverride(discription));
+		override.put(name , discription);
 	}
 	
 	@Override
@@ -30,10 +30,7 @@ public class SimpleCoreTransformer  implements IClassTransformer
 	{
 		if(override.containsKey(name))
 		{
-			if(override.get(name).isActive())
-			{
-				bytes = overrideBytes(name, bytes, SimpleCorePlugin.myLocation);
-			}
+			bytes = overrideBytes(name, bytes, SimpleCorePlugin.myLocation);
 		}
 		return bytes;
 	}
@@ -61,31 +58,5 @@ public class SimpleCoreTransformer  implements IClassTransformer
 			throw new RuntimeException("Error overriding "+name+" from "+location.getName(), e);
 		}
 		return bytes;
-	}
-	
-	public static class ClassOverride
-	{
-		public String description = "";
-		public boolean active;
-		
-		public ClassOverride(String description)
-		{
-			this.description = description;
-		}
-		
-		public ClassOverride()
-		{
-			
-		}
-		
-		public void setState(boolean state)
-		{
-			this.active = state;
-		}
-		
-		public boolean isActive()
-		{
-			return this.active;
-		}
 	}
 }

@@ -11,7 +11,6 @@ import cpw.mods.fml.relauncher.IFMLCallHook;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
 import dries007.SimpleCore.SimpleCore;
 import dries007.SimpleCore.VanillaInterface;
-import dries007.SimpleCore.asm.SimpleCoreTransformer.ClassOverride;
 
 public class SimpleCorePlugin implements IFMLLoadingPlugin, IFMLCallHook
 {
@@ -50,10 +49,6 @@ public class SimpleCorePlugin implements IFMLLoadingPlugin, IFMLCallHook
 			myLocation = (File) data.get("coremodLocation");
 			config = new File((File) data.get("mcLocation") + File.separator + "config", "SimpleCore.cfg");
 		}
-		
-		addOverrides();
-		
-		config();
 	}
 
 	private void addOverrides() 
@@ -65,6 +60,8 @@ public class SimpleCorePlugin implements IFMLLoadingPlugin, IFMLCallHook
 	@Override
 	public Void call() throws Exception 
 	{
+		addOverrides();
+		config();
 		return null;
 	}
 	
@@ -98,13 +95,16 @@ public class SimpleCorePlugin implements IFMLLoadingPlugin, IFMLCallHook
 			for(String name : SimpleCoreTransformer.override.keySet())
 			{
 				prop = configuration.get(CATEGORY_OVERRIDE, name, true);
-				ClassOverride override = SimpleCoreTransformer.override.get(name);
-				if(!override.description.equals(""))
+				prop.comment = SimpleCoreTransformer.override.get(name);
+				
+				if (prop.getBoolean(true))
 				{
-					prop.comment = override.description;
+					SimpleCoreTransformer.override.put(name, prop.comment);
 				}
-				override.setState(prop.getBoolean(true));
-				SimpleCoreTransformer.override.put(name, override);
+				else
+				{
+					SimpleCoreTransformer.override.remove(name);
+				}
 			}
 		} 
 		catch (Exception e) 
