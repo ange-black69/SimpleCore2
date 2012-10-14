@@ -7,6 +7,7 @@ import net.minecraft.src.Packet201PlayerInfo;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.Property;
 
+import cpw.mods.fml.common.ObfuscationReflectionHelper;
 import cpw.mods.fml.relauncher.IFMLCallHook;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
 import dries007.SimpleCore.SimpleCore;
@@ -53,8 +54,14 @@ public class SimpleCorePlugin implements IFMLLoadingPlugin, IFMLCallHook
 
 	private void addOverrides() 
 	{
-		SimpleCoreTransformer.addClassOverride("dg", "Obf. Needed to display rank on the tap-screen.");
-		SimpleCoreTransformer.addClassOverride("net.minecraft.src.Packet201PlayerInfo", "DeObf. Needed to display rank on the tap-screen.");
+		if(ObfuscationReflectionHelper.obfuscation)
+		{
+			SimpleCoreTransformer.addClassOverride("dg", "Needed to display rank on the tap-screen.");
+		}
+		else
+		{
+			SimpleCoreTransformer.addClassOverride("net.minecraft.src.Packet201PlayerInfo", "Needed to display rank on the tap-screen.");
+		}
 	}
 
 	@Override
