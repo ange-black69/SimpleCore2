@@ -83,6 +83,14 @@ public class SimpleCorePlugin implements IFMLLoadingPlugin, IFMLCallHook
 			configuration.load();
 			Property prop;
 			
+			prop = configuration.get(configuration.CATEGORY_GENERAL, "postModlist", true);
+			prop.comment = "Make a file that conatains all the mods with version and URL.";
+			SimpleCore.postModlist = prop.getBoolean(true);
+			
+			prop = configuration.get(configuration.CATEGORY_GENERAL, "postLocation", "mods.txt");
+			prop.comment = "Use / as seperator.";
+			SimpleCore.postLocation = prop.value;
+			
 			prop = configuration.get(CATEGORY_RANK, "defaultRank", "Guest");
 			prop.comment = "Default rank";
 			SimpleCore.defaultRank = prop.value;

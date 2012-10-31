@@ -6,7 +6,7 @@ import java.io.IOException;
 
 public class Packet201PlayerInfo extends Packet
 {
-	/** The player's name. */
+    /** The player's name. */
     public String playerName;
 
     /** Byte that tells whether the player is connected. */
@@ -17,7 +17,7 @@ public class Packet201PlayerInfo extends Packet
 
     public Packet201PlayerInfo(String par1Str, boolean par2, int par3)
     {
-        this.playerName = dries007.SimpleCore.VanillaInterface.doMakeup(par1Str);
+		this.playerName = dries007.SimpleCore.VanillaInterface.doMakeup(par1Str);
         this.isConnected = !dries007.SimpleCore.VanillaInterface.isHidden(par1Str, par2);
         this.ping = par3;
     }

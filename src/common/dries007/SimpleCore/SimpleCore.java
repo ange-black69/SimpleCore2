@@ -1,9 +1,18 @@
 package dries007.SimpleCore;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.logging.Level;
 
+import com.google.common.base.Strings;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 
@@ -12,15 +21,19 @@ import net.minecraft.src.*;
 import net.minecraftforge.common.*;
 import net.minecraftforge.event.*;
 import cpw.mods.fml.common.DummyModContainer;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.LoadController;
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.MetadataCollection;
 import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.ModContainer;
 import cpw.mods.fml.common.ModMetadata;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.Mod.*;
 import cpw.mods.fml.common.asm.SideOnly;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -36,6 +49,9 @@ public class SimpleCore extends DummyModContainer
 	public static String defaultRank;
 	public static String opRank;
 	public static Boolean spawnOverride;
+	
+	public static Boolean postModlist;
+	public static String postLocation;
 
 	public static MinecraftServer server;
 	
@@ -81,6 +97,12 @@ public class SimpleCore extends DummyModContainer
 	}
 	
 	@Subscribe
+	public void serverStarted(FMLServerStartedEvent event)
+	{
+		if(event.getSide().isServer() && postModlist) writemodlist(event);
+	}
+	
+	@Subscribe
 	public void serverStopping(FMLServerStoppingEvent event)
 	{
 		data.saveData(playerData, "playerData");
@@ -99,6 +121,35 @@ public class SimpleCore extends DummyModContainer
 		manager.registerCommand(new CommandRank());
 		manager.registerCommand(new CommandSetSpawn());
 	}
+	
+	public static void writemodlist(FMLServerStartedEvent event)
+	{
+		try
+		{
+			Calendar cal = Calendar.getInstance();
+			FileWriter fstream = new FileWriter(postLocation);
+			PrintWriter out = new PrintWriter(fstream);
+			out.println("# --- ModList ---");
+			out.println("# Generated: " + cal.get(Calendar.DAY_OF_MONTH) + "-" + cal.get(Calendar.MONTH) + "-" + cal.get(Calendar.YEAR) + " (Server time)");
+			out.println("# Change the lacation of this file in config/SimpleCore.cfg");
+			out.println();
+			
+			for(ModContainer mod : Loader.instance().getModList())
+			{
+				String url = "";
+				if(!mod.getMetadata().url.isEmpty()) url = mod.getMetadata().url;
+				if(!mod.getMetadata().updateUrl.isEmpty()) url = mod.getMetadata().updateUrl;
+				out.println(mod.getName() + " Version:" + mod.getVersion() + " URL:" + url);
+			}
+				
+			out.close();
+		}
+		catch (Exception e)
+		{	
+			FMLLog.severe("Error writing to modlist");
+			FMLLog.severe(e.getLocalizedMessage());
+		}
+	}	
 	
 	public static boolean newRank(String name)
 	{
