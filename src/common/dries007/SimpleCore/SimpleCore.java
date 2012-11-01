@@ -15,6 +15,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.src.*;
 import net.minecraftforge.common.*;
 import net.minecraftforge.event.*;
+import net.minecraftforge.event.world.WorldEvent;
 import cpw.mods.fml.common.*;
 import cpw.mods.fml.common.Mod.*;
 import cpw.mods.fml.common.asm.SideOnly;
@@ -60,6 +61,7 @@ public class SimpleCore extends DummyModContainer
 	public boolean registerBus(EventBus bus, LoadController controller)
 	{
 		bus.register(this);
+		MinecraftForge.EVENT_BUS.register(this);
 		return true;		
 	}
 	
@@ -94,6 +96,13 @@ public class SimpleCore extends DummyModContainer
 	public void serverStarted(FMLServerStartedEvent event)
 	{
 		if(event.getSide().isServer() && postModlist) writemodlist(event);
+	}
+	
+	@ForgeSubscribe
+	public void chuckSave(WorldEvent.Save event)
+	{
+		data.saveData(playerData, "playerData");
+		data.saveData(rankData, "rankData");
 	}
 	
 	@Subscribe
