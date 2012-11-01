@@ -75,11 +75,15 @@ public class SimpleCore extends DummyModContainer
 		rankData=data.loadData("rankData");
 		
 		Permissions.addPermission("SC.admin");
-		Permissions.addRank(opRank);
-		Permissions.addRank(defaultRank);
 		
 		if(!rankData.hasKey(opRank)) newRank(opRank);
 		if(!rankData.hasKey(defaultRank)) newRank(defaultRank);
+		
+		for(Object base : rankData.getTags())
+		{
+			NBTBase tag = (NBTBase) base;
+			Permissions.addRank(tag.getName());
+		}
 		
 		addcommands();
 		
@@ -141,8 +145,23 @@ public class SimpleCore extends DummyModContainer
 		}
 	}	
 	
+	public static boolean newRank(String name, String nameToCopy)
+	{
+		Permissions.addRank(name);
+		if (!rankData.hasKey(name))
+		{
+			rankData.setCompoundTag(name, rankData.getCompoundTag(name));
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
 	public static boolean newRank(String name)
 	{
+		Permissions.addRank(name);
 		if (!rankData.hasKey(name))
 		{
 			NBTTagCompound rank = new NBTTagCompound();

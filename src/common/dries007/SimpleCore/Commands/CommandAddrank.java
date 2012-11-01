@@ -57,17 +57,30 @@ public class CommandAddrank extends CommandBase
             		NBTTagCompound rank = (NBTTagCompound) ranks.next();
             		if(rank.getName().trim().equalsIgnoreCase(args[1]))
             		{
-            			SimpleCore.rankData.setCompoundTag(args[0], (NBTTagCompound) SimpleCore.rankData.getCompoundTag(rank.getName()).copy());
-            			sender.sendChatToPlayer("Rank " + args[0] + " made by copying " + args[1] + ".");
-            			return;
+            			if(SimpleCore.newRank(args[0], args[1]))
+            			{
+            				sender.sendChatToPlayer("Rank " + args[0] + " made by copying " + args[1] + ".");
+            				return;
+            			}
+            			else
+            			{
+            				sender.sendChatToPlayer("Error. Coulden't make " + args[0] + " by copying " + args[1] + "!");
+            			}
             		}
             	}
             	sender.sendChatToPlayer("Rank to copy (" + args[1] + ") doesn't exist.");
     		}
     		else
     		{
-    			SimpleCore.newRank(args[0]);
-    			sender.sendChatToPlayer("Rank " + args[0] + " made.");
+    			if(SimpleCore.newRank(args[0]))
+    			{
+    				sender.sendChatToPlayer("Rank " + args[0] + " made.");
+    				return;
+    			}
+    			else
+    			{
+    				sender.sendChatToPlayer("Error. Coulden't make " + args[0] + "!");
+    			}
     		}
     	}
     	else
