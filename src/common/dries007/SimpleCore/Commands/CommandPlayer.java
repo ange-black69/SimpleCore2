@@ -53,20 +53,31 @@ public class CommandPlayer extends CommandBase
     	NBTTagCompound data1 = SimpleCore.playerData.getCompoundTag(target.username);
     	NBTTagCompound permissions = data1.getCompoundTag("Permissions");
     	
+    	String permission = getPermission(args[1]);
+    	
     	if(args[2].equalsIgnoreCase("allow"))
     	{
     		permissions.setBoolean(args[1], true);
-    		sender.sendChatToPlayer("You have allowed '" + target.username + "' '" + args[1] + "'.");
+    		sender.sendChatToPlayer("You have allowed '" + target.username + "' '" + permission + "'.");
     	}
     	else if(args[2].equalsIgnoreCase("deny"))
     	{
     		permissions.setBoolean(args[1], false);
-    		sender.sendChatToPlayer("You have denied '" + target.username + "' '" + args[1] + "'.");
+    		sender.sendChatToPlayer("You have denied '" + target.username + "' '" + permission + "'.");
     	}
     	else throw new WrongUsageException(getCommandUsage(sender), new Object[0]);
     	data1.setCompoundTag("Permissions", permissions);
     	SimpleCore.playerData.setCompoundTag(target.username, data1);
     	data.saveData(SimpleCore.playerData, "playerData");
+    }
+    
+    protected String getPermission(String input)
+    {
+    	for(String st : SimpleCore.availablePermission)
+    	{
+    		if(st.equalsIgnoreCase(input)) return input;
+    	}
+    	throw new WrongUsageException("Permission '" + input + "' not found!", new Object[0]);
     }
     
     public boolean canCommandSenderUseCommand(ICommandSender sender)

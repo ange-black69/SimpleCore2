@@ -117,6 +117,7 @@ public class SimpleCore extends DummyModContainer
 		ICommandManager commandManager = server.getCommandManager();
 		ServerCommandManager manager = ((ServerCommandManager) commandManager); 
 		
+		manager.registerCommand(new CommandPermissions());
 		manager.registerCommand(new CommandPromote());
 		manager.registerCommand(new CommandAddrank());
 		manager.registerCommand(new CommandRanks());
