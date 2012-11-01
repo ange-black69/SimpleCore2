@@ -9,7 +9,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.src.*;
 
 public class CommandPromote extends CommandBase
-{
+{	
     public String getCommandName()
     {
         return "promote";
@@ -27,7 +27,7 @@ public class CommandPromote extends CommandBase
     
     public void processCommand(ICommandSender sender, String[] args)
     {
-    	EntityPlayer target = this.func_71540_a(args[0]);
+    	EntityPlayer target = func_82359_c(sender, args[0]);
     	Iterator ranks = SimpleCore.rankData.getTags().iterator();
     	while (ranks.hasNext())
     	{
@@ -50,20 +50,6 @@ public class CommandPromote extends CommandBase
         return Permissions.hasPermission(sender.getCommandSenderName(), "SC.admin");
     }
     
-    protected EntityPlayer func_71540_a(String par1Str)
-    {
-        EntityPlayerMP var2 = MinecraftServer.getServer().getConfigurationManager().getPlayerForUsername(par1Str);
-
-        if (var2 == null)
-        {
-            throw new PlayerNotFoundException();
-        }
-        else
-        {
-            return var2;
-        }
-    }
-    
     /**
      * Adds the strings available in this command to the given list of tab completion options.
      */
@@ -75,18 +61,10 @@ public class CommandPromote extends CommandBase
         }
         else if(args.length == 2)
         {
-        	Iterator ranks = SimpleCore.rankData.getTags().iterator();
-        	String[] rankNames = new String[SimpleCore.rankData.getTags().size()-1];
-        	String rankNames1 = new String();
-        	int i = 0;
-        	while (ranks.hasNext())
-        	{
-        		NBTTagCompound rank = (NBTTagCompound) ranks.next();
-        		rankNames[i]=rank.getName().trim().toLowerCase();
-        		rankNames1 = rankNames1 + rank.getName().trim().toLowerCase() + ","; 
-        	}
-        	sender.sendChatToPlayer("List of ranks: " + rankNames1.substring(0, rankNames1.length()-1));
-        	return getListOfStringsMatchingLastWord(args, rankNames);
+        	String msg = "";
+        	for(String st : Permissions.getRanks()) msg = msg + st + ", ";
+        	sender.sendChatToPlayer("List of ranks: " + msg);
+        	return getListOfStringsMatchingLastWord(args, Permissions.getRanks());
         }
         return null;
     }

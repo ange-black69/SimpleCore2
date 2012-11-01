@@ -25,6 +25,23 @@ public class CommandAddrank extends CommandBase
         return null;
     }
     
+    public boolean canCommandSenderUseCommand(ICommandSender sender)
+    {
+    	return Permissions.hasPermission(sender.getCommandSenderName(), "SC.admin");
+    }
+    
+    public List addTabCompletionOptions(ICommandSender sender, String[] args)
+    {
+        if(args.length == 2)
+        {
+        	String msg = "";
+        	for(String st : Permissions.getRanks()) msg = msg + st + ", ";
+        	sender.sendChatToPlayer("List of ranks: " + msg);
+        	return getListOfStringsMatchingLastWord(args, Permissions.getRanks());
+        }
+        return null;
+    }
+    
     public void processCommand(ICommandSender sender, String[] args)
     {
     	if(args.length==0) throw new WrongUsageException(getCommandUsage(sender), new Object[0]);
@@ -57,47 +74,5 @@ public class CommandAddrank extends CommandBase
     	{
     		sender.sendChatToPlayer("Rank " + args[0] + " already exists.");
     	}
-    }
-    
-    public boolean canCommandSenderUseCommand(ICommandSender sender)
-    {
-    	return Permissions.hasPermission(sender.getCommandSenderName(), "SC.admin");
-    }
-    
-    protected EntityPlayer func_71540_a(String par1Str)
-    {
-        EntityPlayerMP var2 = MinecraftServer.getServer().getConfigurationManager().getPlayerForUsername(par1Str);
-
-        if (var2 == null)
-        {
-            throw new PlayerNotFoundException();
-        }
-        else
-        {
-            return var2;
-        }
-    }
-    
-    /**
-     * Adds the strings available in this command to the given list of tab completion options.
-     */
-    public List addTabCompletionOptions(ICommandSender sender, String[] args)
-    {
-        if(args.length == 2)
-        {
-        	Iterator ranks = SimpleCore.rankData.getTags().iterator();
-        	String[] rankNames = new String[SimpleCore.rankData.getTags().size()-1];
-        	String rankNames1 = new String();
-        	int i = 0;
-        	while (ranks.hasNext())
-        	{
-        		NBTTagCompound rank = (NBTTagCompound) ranks.next();
-        		rankNames[i]=rank.getName().trim().toLowerCase();
-        		rankNames1 = rankNames1 + rank.getName().trim().toLowerCase() + ","; 
-        	}
-        	sender.sendChatToPlayer("List of ranks: " + rankNames1.substring(0, rankNames1.length()-1));
-        	return getListOfStringsMatchingLastWord(args, rankNames);
-        }
-        return null;
     }
 }

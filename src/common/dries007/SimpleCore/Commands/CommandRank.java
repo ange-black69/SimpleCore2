@@ -68,20 +68,23 @@ public class CommandRank extends CommandBase
     
     public List addTabCompletionOptions(ICommandSender sender, String[] args)
     {
-        if(args.length == 2)
+    	if(args.length == 1)
         {
-        	Iterator ranks = SimpleCore.rankData.getTags().iterator();
-        	String[] rankNames = new String[SimpleCore.rankData.getTags().size()-1];
-        	String rankNames1 = new String();
-        	int i = 0;
-        	while (ranks.hasNext())
-        	{
-        		NBTTagCompound rank = (NBTTagCompound) ranks.next();
-        		rankNames[i]=rank.getName().trim().toLowerCase();
-        		rankNames1 = rankNames1 + rank.getName().trim().toLowerCase() + ","; 
-        	}
-        	sender.sendChatToPlayer("List of ranks: " + rankNames1.substring(0, rankNames1.length()-1));
-        	return getListOfStringsMatchingLastWord(args, rankNames);
+    		String msg = "";
+        	for(String st : Permissions.getRanks()) msg = msg + st + ", ";
+        	sender.sendChatToPlayer("List of ranks: " + msg);
+        	return getListOfStringsMatchingLastWord(args, Permissions.getRanks());
+        }
+        else if(args.length == 2)
+        {
+        	String msg = "";
+        	for(String st : Permissions.getPermissions()) msg = msg + st + ", ";
+        	sender.sendChatToPlayer("List of permissions: " + msg);
+        	return getListOfStringsMatchingLastWord(args, Permissions.getPermissions());
+        }
+        else if (args.length == 3)
+        {
+        	return getListOfStringsMatchingLastWord(args, "allow", "deny");
         }
         return null;
     }

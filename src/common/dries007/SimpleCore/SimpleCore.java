@@ -1,16 +1,11 @@
 package dries007.SimpleCore;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.logging.Level;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.google.common.base.Strings;
 import com.google.common.eventbus.EventBus;
@@ -20,22 +15,10 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.src.*;
 import net.minecraftforge.common.*;
 import net.minecraftforge.event.*;
-import cpw.mods.fml.common.DummyModContainer;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.FMLLog;
-import cpw.mods.fml.common.LoadController;
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.MetadataCollection;
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.ModContainer;
-import cpw.mods.fml.common.ModMetadata;
-import cpw.mods.fml.common.Side;
+import cpw.mods.fml.common.*;
 import cpw.mods.fml.common.Mod.*;
 import cpw.mods.fml.common.asm.SideOnly;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.event.FMLServerStartedEvent;
-import cpw.mods.fml.common.event.FMLServerStartingEvent;
-import cpw.mods.fml.common.event.FMLServerStoppingEvent;
+import cpw.mods.fml.common.event.*;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.server.FMLServerHandler;
 import dries007.SimpleCore.Commands.*;
@@ -49,6 +32,9 @@ public class SimpleCore extends DummyModContainer
 	public static String defaultRank;
 	public static String opRank;
 	public static Boolean spawnOverride;
+	
+	public static HashSet<String> availablePermission = new HashSet<String>();
+	public static HashSet<String> availableRanks = new HashSet<String>();
 	
 	public static Boolean postModlist;
 	public static String postLocation;
@@ -82,16 +68,20 @@ public class SimpleCore extends DummyModContainer
 	{
 		server = ModLoader.getMinecraftServerInstance();
 		
-		addcommands();
-		
 		NBTTagInt example = new NBTTagInt("Example", 42);
 		Permissions.addDefaultSetting(example);
 		
 		playerData=data.loadData("playerData");
 		rankData=data.loadData("rankData");
 		
+		Permissions.addPermission("SC.admin");
+		Permissions.addRank(opRank);
+		Permissions.addRank(defaultRank);
+		
 		if(!rankData.hasKey(opRank)) newRank(opRank);
 		if(!rankData.hasKey(defaultRank)) newRank(defaultRank);
+		
+		addcommands();
 		
 		GameRegistry.registerPlayerTracker(new PlayerTracker());
 	}

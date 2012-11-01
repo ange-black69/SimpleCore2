@@ -1,6 +1,7 @@
 package dries007.SimpleCore;
 
 import java.util.Iterator;
+import java.util.Set;
 
 import net.minecraft.src.*;
 
@@ -13,7 +14,27 @@ public class Permissions extends SimpleCore
 	 */
 	public static String[] getRanks()
 	{
-		return (String[]) playerData.getTags().toArray();
+		return availableRanks.toArray(new String[availableRanks.size()]);
+	}
+	
+	/**
+	 * Returns all the available permissions
+	 * 
+	 * @return permissions All the permissions as string[]
+	 */
+	public static String[] getPermissions()
+	{
+		return availablePermission.toArray(new String[availablePermission.size()]);
+	}
+	
+	public static void addPermission(String perm)
+	{
+		availablePermission.add(perm);
+	}
+	
+	public static void addRank(String rank)
+	{
+		availableRanks.add(rank);
 	}
 	
 	/**
@@ -60,6 +81,7 @@ public class Permissions extends SimpleCore
 	 */
 	public static boolean hasPermission(EntityPlayer player, String reqPermission)
 	{
+		availablePermission.add(reqPermission);
 		if(player.username.equalsIgnoreCase("Server")) return true;
 		if (!ModLoader.getMinecraftServerInstance().isDedicatedServer()) return true;
 		if (getRank(player).equals(opRank)) return true;
@@ -108,6 +130,7 @@ public class Permissions extends SimpleCore
 	 */
 	public static boolean hasPermission(String username, String reqPermission)
 	{
+		availablePermission.add(reqPermission);
 		if(username.equalsIgnoreCase("Server")) return true;
 		if(ModLoader.getMinecraftServerInstance().getConfigurationManager().getOps().contains(username.trim().toLowerCase())) return true;
 		EntityPlayer player = ModLoader.getMinecraftServerInstance().getConfigurationManager().getPlayerForUsername(username);

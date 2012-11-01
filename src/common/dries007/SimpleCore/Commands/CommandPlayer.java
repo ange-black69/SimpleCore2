@@ -10,7 +10,7 @@ import net.minecraft.src.*;
 
 public class CommandPlayer extends CommandBase
 {
-    public String getCommandName()
+	public String getCommandName()
     {
         return "player";
     }
@@ -25,10 +25,30 @@ public class CommandPlayer extends CommandBase
         return null;
     }
     
+    public List addTabCompletionOptions(ICommandSender sender, String[] args)
+    {
+        if(args.length == 1)
+        {
+        	return getListOfStringsMatchingLastWord(args, MinecraftServer.getServer().getAllUsernames());   
+        }
+        else if(args.length == 2)
+        {
+        	String msg = "";
+        	for(String st : Permissions.getPermissions()) msg = msg + st + ", ";
+        	sender.sendChatToPlayer("List of permissions: " + msg);
+        	return getListOfStringsMatchingLastWord(args, Permissions.getPermissions());
+        }
+        else if (args.length == 3)
+        {
+        	return getListOfStringsMatchingLastWord(args, "allow", "deny");
+        }
+        return null;
+    }
+    
     public void processCommand(ICommandSender sender, String[] args)
     {	
     	if(args.length!=3) throw new WrongUsageException(getCommandUsage(sender), new Object[0]);
-    	EntityPlayer target = this.func_71540_a(args[0]);
+    	EntityPlayer target = func_82359_c(sender, args[0]);
     	
     	NBTTagCompound data1 = SimpleCore.playerData.getCompoundTag(target.username);
     	NBTTagCompound permissions = data1.getCompoundTag("Permissions");
@@ -52,19 +72,5 @@ public class CommandPlayer extends CommandBase
     public boolean canCommandSenderUseCommand(ICommandSender sender)
     {
     	return Permissions.hasPermission(sender.getCommandSenderName(), "SC.admin");
-    }
-    
-    protected EntityPlayer func_71540_a(String par1Str)
-    {
-        EntityPlayerMP var2 = MinecraftServer.getServer().getConfigurationManager().getPlayerForUsername(par1Str);
-
-        if (var2 == null)
-        {
-            throw new PlayerNotFoundException();
-        }
-        else
-        {
-            return var2;
-        }
     }
 }

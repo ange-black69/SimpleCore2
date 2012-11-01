@@ -64,22 +64,14 @@ public class CommandSetSpawn extends CommandBase
      */
     public List addTabCompletionOptions(ICommandSender sender, String[] args)
     {
-        if(args.length == 1)
+    	if(args.length == 1)
         {
-        	Iterator ranks = SimpleCore.rankData.getTags().iterator();
-        	String[] rankNames = new String[SimpleCore.rankData.getTags().size()-1];
-        	String rankNames1 = new String();
-        	int i = 0;
-        	while (ranks.hasNext())
-        	{
-        		NBTTagCompound rank = (NBTTagCompound) ranks.next();
-        		rankNames[i]=rank.getName().trim().toLowerCase();
-        		rankNames1 = rankNames1 + rank.getName().trim().toLowerCase() + ","; 
-        	}
-        	sender.sendChatToPlayer("List of ranks: " + rankNames1.substring(0, rankNames1.length()-1));
-        	return getListOfStringsMatchingLastWord(args, rankNames);
+        	String msg = "";
+        	for(String st : Permissions.getPermissions()) msg = msg + st + ", ";
+        	sender.sendChatToPlayer("List of permissions: " + msg);
+        	return getListOfStringsMatchingLastWord(args, Permissions.getPermissions());
         }
-        return null;
+    	return null;
     }
     
     protected String getRank(String input)
