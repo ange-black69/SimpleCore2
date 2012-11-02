@@ -32,22 +32,22 @@ public class WorldBorder implements IScheduledTickHandler
 	{
 		if(player.posX < minX)
 		{
-			player.sendChatToPlayer(Color.RED + wbMessage);
+			player.sendChatToPlayer(color.RED + wbMessage);
 			player.playerNetServerHandler.setPlayerLocation(minX, player.posY, player.posZ, player.rotationYaw, player.rotationPitch);
 		}
 		if(player.posX > maxX)
 		{
-			player.sendChatToPlayer(Color.RED + wbMessage);
+			player.sendChatToPlayer(color.RED + wbMessage);
 			player.playerNetServerHandler.setPlayerLocation(maxX, player.posY, player.posZ, player.rotationYaw, player.rotationPitch);
 		}
 		if(player.posZ < minZ)
 		{
-			player.sendChatToPlayer(Color.RED + wbMessage);
+			player.sendChatToPlayer(color.RED + wbMessage);
 			player.playerNetServerHandler.setPlayerLocation(player.posX, player.posY, minZ, player.rotationYaw, player.rotationPitch);
 		}
 		if(player.posZ > maxZ)
 		{
-			player.sendChatToPlayer(Color.RED + wbMessage);
+			player.sendChatToPlayer(color.RED + wbMessage);
 			player.playerNetServerHandler.setPlayerLocation(player.posX, player.posY, maxZ, player.rotationYaw, player.rotationPitch);
 		}
 	}
