@@ -1,6 +1,6 @@
 package dries007.SimpleCore;
 
-public class color 
+public class Color 
 {
 	public static final String CODE = "\u00a7";
 	public static final String BLACK = CODE + "0";
