@@ -21,6 +21,7 @@ import cpw.mods.fml.common.Mod.*;
 import cpw.mods.fml.common.asm.SideOnly;
 import cpw.mods.fml.common.event.*;
 import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.server.FMLServerHandler;
 import dries007.SimpleCore.Commands.*;
 import dries007.SimpleCore.asm.SimpleCorePlugin;
@@ -89,6 +90,7 @@ public class SimpleCore extends DummyModContainer
 		
 		addcommands();
 		
+		TickRegistry.registerScheduledTickHandler(new WorldBorder(), Side.SERVER);
 		GameRegistry.registerPlayerTracker(new PlayerTracker());
 	}
 	
@@ -124,6 +126,7 @@ public class SimpleCore extends DummyModContainer
 		manager.registerCommand(new CommandPlayer());
 		manager.registerCommand(new CommandRank());
 		manager.registerCommand(new CommandSetSpawn());
+		manager.registerCommand(new CommandWorldborder());
 	}
 	
 	public static void writemodlist(FMLServerStartedEvent event)

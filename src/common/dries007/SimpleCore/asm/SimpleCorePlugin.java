@@ -12,6 +12,7 @@ import cpw.mods.fml.relauncher.IFMLCallHook;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
 import dries007.SimpleCore.SimpleCore;
 import dries007.SimpleCore.VanillaInterface;
+import dries007.SimpleCore.WorldBorder;
 
 public class SimpleCorePlugin implements IFMLLoadingPlugin, IFMLCallHook
 {
@@ -98,6 +99,10 @@ public class SimpleCorePlugin implements IFMLLoadingPlugin, IFMLCallHook
 			prop = configuration.get(CATEGORY_RANK, "opRank", "Admin");
 			prop.comment = "Name of the OP rank";
 			SimpleCore.opRank = prop.value;
+			
+			prop = configuration.get(CATEGORY_RANK, "wbMessage", "World ends here");
+			prop.comment = null;
+			WorldBorder.wbMessage = prop.value;
 			
 	    	prop = configuration.get(configuration.CATEGORY_GENERAL, "spawnOverride", true);
 			prop.comment = "When a player repsawns to the server spawn, override the location to allow 1 block specific spawn zone. Use setspawn to set the spawn, you can specify ranks for different spawn per rank.";
