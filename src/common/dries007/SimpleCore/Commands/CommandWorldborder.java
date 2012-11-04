@@ -18,7 +18,7 @@ public class CommandWorldborder extends CommandBase
 
     public String getCommandUsage(ICommandSender sender)
     {
-    	return "/" + getCommandName() + " <set|onn|off> [radius OR minX,minZ,maxX,maxZ]";
+    	return "/" + getCommandName() + " <set|on|off> [radius OR minX,minZ,maxX,maxZ]";
     }
 
     public List getCommandAliases()
