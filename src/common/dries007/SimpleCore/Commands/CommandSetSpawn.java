@@ -43,7 +43,7 @@ public class CommandSetSpawn extends CommandBase
     		NBTTagCompound spawn = new NBTTagCompound();
     		try {spawn.setString("name", args[1]);} catch (Exception e) {spawn.setString("name", "spawn");}
     		spawn.setDouble("X", player.posX); 
-			spawn.setDouble("Y", player.posY + 5D);
+			spawn.setDouble("Y", player.posY);
 			spawn.setDouble("Z", player.posZ);
 			spawn.setFloat("yaw", player.rotationYaw);
 			spawn.setFloat("pitch", player.rotationPitch);
