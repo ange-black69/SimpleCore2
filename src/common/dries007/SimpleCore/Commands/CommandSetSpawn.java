@@ -34,7 +34,7 @@ public class CommandSetSpawn extends CommandBase
     		Double Y = player.posY;
     		Double Z = player.posZ;
     		player.worldObj.getWorldInfo().setSpawnPosition(X.intValue(),Y.intValue(),Z.intValue());
-    		player.sendChatToPlayer("Serverspawn set. All ranks with no seperate spawn will spawn here.");
+    		player.sendChatToPlayer(Color.YELLOW + "Serverspawn set. All ranks with no seperate spawn will spawn here.");
     	}
     	else
     	{
